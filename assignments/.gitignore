@@ -97,8 +97,7 @@ ENV/
 # mkdocs documentation
 /site
 
-# mypy
-.mypy_cache/
+# personal
 .idea/
 assignment1/utils/datasets/
 assignment1/q3_word_vectors.png
