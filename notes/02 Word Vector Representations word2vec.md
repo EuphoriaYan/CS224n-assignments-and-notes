@@ -1,9 +1,9 @@
-## Word representations
+## Word Vector Representation & word2vec
 
 ### How to represent the meaning of a word?
 
 Wordnet:  
-taxonomy information about words.
+taxonomy(分类学) information about words.
 
 
 	from nltk import wordnet as wn
@@ -37,7 +37,7 @@ build a dense vector for each word type, chosen so that it is good at predicting
 predict between a center word wt and context words  
 p(context|wt) = ...  
 has a loss funtion:  
-J = 1 − p(w−t |wt)  
+$$ J = 1 − p(w−t |wt)  $$  
 
 ### Main idea
 Two algorithm:  
@@ -73,16 +73,14 @@ Softmax is a standard way to turn numbers into a probability distribution.
 
 $$
 \theta = 
-  \left[
-    \begin{matrix}  
-    v\_{a}      \\\\  
-	\vdots      \\\\  
-	v\_{zebra}  \\\\  
-    u\_{a}      \\\\  
-	\vdots      \\\\  
-	u\_{zebra}  
-    \end{matrix}  
-  \right]
+\begin{bmatrix}  
+   v\_{a}      \\\\  
+\vdots      \\\\  
+v\_{zebra}  \\\\  
+   u\_{a}      \\\\  
+\vdots      \\\\  
+u\_{zebra}  
+\end{bmatrix}  
 $$
 
 Optimize these parameters.
@@ -102,24 +100,30 @@ Paper: A Simple but Tough-to-beat Baseline for Sentence Embeddings
 weighted Bag-of-words + remove some special direction  
 
 Step 1:  
-$$ v\_s\leftarrow\cfrac{1}{\vert s\vert} \sum\_{w \in s}\cfrac{a}{a+p(w)} $$  
+$$ v\_s\leftarrow\cfrac{1}{\vert s \vert} \sum\_{w \in s}\cfrac{a}{a+p(w)} $$  
 a is a constant, p(w) is the frequency of this word.  
 
 Step 2:  
-Computer the first principle component u of $v\_s$  
-$$ v\_s \leftarrow v\_s - u u^T v\_s $$  
+Computer the first principle component $u$ of $v\_s$  
+$$ v\_s \leftarrow v\_s - u \cdot u^T \cdot v\_s $$  
 
 ###Use gradient to optimise the model
 
 Focus on word representation as center word.  
 
-$\cfrac{\partial}{\partial v_c} log \cfrac{exp(u_o^Tv_c)}{\sum\_{w=1}^v exp(u_w^Tv_c)} $  
-$ = \cfrac{\partial}{\partial v_c} log exp(u_o^Tv_c) - \cfrac{\partial}{\partial v_c} log \sum\_{w=1}^v exp(u_w^Tv_c) $  
-$ = u_o - \cfrac{1}{\sum\_{w=1}^{v} exp(u_w^Tv_c)} \cdot \cfrac{\partial}{\partial v_c} \sum\_{x=1}^v exp(u_x^Tv_c)$  
-$ = u_o - \cfrac{1}{\sum\_{w=1}^{v} exp(u_w^Tv_c)} \cdot (\sum\_{x=1}^v exp(u_x^Tv_c)u_x) $  
-$ = u_o - \sum\_{x=1}^v \cfrac{exp(u_x^Tv_c)}{\sum\_{w=1}^v exp(u_w^Tv_c)} u_x $  
-$ = u_o - \sum\_{x=1}^v p(x|c) u_x $  
+$$  
+\begin{align}  
+\cfrac{\partial log(p(o|c))}{\partial v_c}  
+& = \cfrac{\partial}{\partial v_c} log \cfrac{exp(u_o^Tv_c)}{\sum\_{w=1}^v exp(u_w^Tv_c)} \\\\  
+& = \cfrac{\partial}{\partial v_c} log exp(u_o^Tv_c) - \cfrac{\partial}{\partial v_c} log \sum\_{w=1}^v exp(u_w^Tv_c) \\\\  
+& = u_o - \cfrac{1}{\sum\_{w=1}^{v} exp(u_w^Tv_c)} \cdot \cfrac{\partial}{\partial v_c} \sum\_{x=1}^v exp(u_x^Tv_c) \\\\  
+& = u_o - \cfrac{1}{\sum\_{w=1}^{v} exp(u_w^Tv_c)} \cdot (\sum\_{x=1}^v exp(u_x^Tv_c)u_x) \\\\  
+& = u_o - \sum\_{x=1}^v \cfrac{exp(u_x^Tv_c)}{\sum\_{w=1}^v exp(u_w^Tv_c)} u_x \\\\  
+& = u_o - \sum\_{x=1}^v p(x|c) u_x \\\\  
+\end{align}  
+$$  
 
 $u_o$ is the actual output context word appeared, $\sum\_{x=1}^v p(x|c) u_x$ has the form of an exception.
 
 Use Stochastic Gradient Descent instead of Basic Gradient Descent.  
+
