@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>02 Word Vector Representations word2vec</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 20px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 21px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+h5 {
+  font-size: 20px;
+}
+
+h6 {
+  color: #777;
+  font-size: 20px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 18px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 19px;
+  line-height: 25px;
+  overflow: auto;
+  padding: 12px 16px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 7px 10px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { fonts: ["TeX"] }
+  });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h2>Word Vector Representation &amp; word2vec</h2>
+<h3>How to represent the meaning of a word?</h3>
+<p>Wordnet:<br />
+taxonomy(分类学) information about words.</p>
+<pre><code>from nltk import wordnet as wn
+panda = wn.synset('panda.n.01')
+hyper = lambda s: s.hypernyms()
+list(panda.closure(hyper))
+</code></pre>
+
+<p>Use the nltk to get a hold of word net.  </p>
+<h3>Problem with the discrete representation</h3>
+<ol>
+<li>Synonyms:<br />
+<code>adept, expert, good, practiced, proficient, skillful</code>  </li>
+<li>Missing new words  </li>
+<li>Subjective  </li>
+<li>Requires human labor to create and adapt  </li>
+<li>Hard to compute accurate word similarity  </li>
+</ol>
+<p>Usually regards words as atomic symbols.<br />
+We call this a one-hot representation.<br />
+Our query and document vectors are orthogonal(正交的).  </p>
+<h3>Distributional similarity based representations</h3>
+<p>“You shall know a word by the company it keeps”  (J. R. Firth 1957: 11)<br />
+build a dense vector for each word type, chosen so that it is good at predicting other words appearing in its context.  </p>
+<h2>Word2Vec</h2>
+<h3>Basic idea</h3>
+<p>predict between a center word wt and context words<br />
+p(context|wt) = ...<br />
+has a loss funtion:<br />
+$$ J = 1 − p(w−t |wt)  $$  </p>
+<h3>Main idea</h3>
+<p>Two algorithm:  </p>
+<ol>
+<li>Skip-Gram(SG)<br />
+Predict context words given target (position independent)</li>
+<li>Continuous Bag of Word(CBOW)<br />
+Predict target word from bag-of-words context</li>
+</ol>
+<p>Two training methods:</p>
+<ol>
+<li>
+<p>Hierarchical softmax  
+</p>
+</li>
+<li>
+<p>Negative sampling  
+</p>
+</li>
+</ol>
+<h3>Details of SG</h3>
+<p>Loss function:<br />
+$$ J'(\theta) = \prod_{t = 1}^T \prod_{-m \leq j \leq m, j \neq 0} p(w_{t+j}|w_t\theta)$$  </p>
+<p>Tweak that(negative log likelihood):<br />
+$$ J(\theta) = -\cfrac{1}{T} \sum_{t = 1}^T \sum_{-m \leq j \leq m, j \neq 0} p(w_{t+j}|w_t)$$  </p>
+<p>How to calculate $ p(o|c) $:</p>
+<p>$$ p(o|c) = \cfrac{exp(u_o^Tv_c)}{\sum_{w=1}^vexp(u_w^Tv_c)} $$</p>
+<p>o is the output(outside) word index, c is the center word index, v &amp; u are &quot;center&quot; and &quot;outside&quot; vectors of indices c and o.  </p>
+<p>Softmax is a standard way to turn numbers into a probability distribution.   </p>
+<h3>Train the model</h3>
+<p>$$
+\theta = 
+\begin{bmatrix}<br />
+   v_{a}      \\<br />
+\vdots      \\<br />
+v_{zebra}  \\<br />
+   u_{a}      \\<br />
+\vdots      \\<br />
+u_{zebra}<br />
+\end{bmatrix}<br />
+$$</p>
+<p>Optimize these parameters.</p>
+<p>Note: Every word has two vectors.  </p>
+<h3>Highlight - Sentence Embedding</h3>
+<p>We can compute sentence similarity using the inner product.<br />
+Use as features for sentence classification(e.g. sentiment analysis).  </p>
+<ol>
+<li>Bag-of-words(BoW): use words' embedding vectors' average.  </li>
+<li>Recurrent neural network, recursive neural network, convolutional neural network.</li>
+</ol>
+<p>Paper: A Simple but Tough-to-beat Baseline for Sentence Embeddings  </p>
+<p>weighted Bag-of-words + remove some special direction  </p>
+<p>Step 1:<br />
+$$ v_s\leftarrow\cfrac{1}{\vert s \vert} \sum_{w \in s}\cfrac{a}{a+p(w)} $$<br />
+a is a constant, p(w) is the frequency of this word.  </p>
+<p>Step 2:<br />
+Computer the first principle component $u$ of $v_s$<br />
+$$ v_s \leftarrow v_s - u \cdot u^T \cdot v_s $$  </p>
+<h3>Use gradient to optimise the model</h3>
+<p>Focus on word representation as center word.  </p>
+<p>$$<br />
+\begin{align}<br />
+\cfrac{\partial log(p(o|c))}{\partial v_c}<br />
+&amp; = \cfrac{\partial}{\partial v_c} log \cfrac{exp(u_o^Tv_c)}{\sum_{w=1}^v exp(u_w^Tv_c)} \\<br />
+&amp; = \cfrac{\partial}{\partial v_c} log exp(u_o^Tv_c) - \cfrac{\partial}{\partial v_c} log \sum_{w=1}^v exp(u_w^Tv_c) \\<br />
+&amp; = u_o - \cfrac{1}{\sum_{w=1}^{v} exp(u_w^Tv_c)} \cdot \cfrac{\partial}{\partial v_c} \sum_{x=1}^v exp(u_x^Tv_c) \\<br />
+&amp; = u_o - \cfrac{1}{\sum_{w=1}^{v} exp(u_w^Tv_c)} \cdot (\sum_{x=1}^v exp(u_x^Tv_c)u_x) \\<br />
+&amp; = u_o - \sum_{x=1}^v \cfrac{exp(u_x^Tv_c)}{\sum_{w=1}^v exp(u_w^Tv_c)} u_x \\<br />
+&amp; = u_o - \sum_{x=1}^v p(x|c) u_x \\<br />
+\end{align}<br />
+$$  </p>
+<p>$u_o$ is the actual output context word appeared, $\sum_{x=1}^v p(x|c) u_x$ has the form of an exception.</p>
+<p>Use Stochastic Gradient Descent instead of Basic Gradient Descent.  </p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>03 Advanced Word Vector Representations</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 20px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 21px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+h5 {
+  font-size: 20px;
+}
+
+h6 {
+  color: #777;
+  font-size: 20px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 18px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 19px;
+  line-height: 25px;
+  overflow: auto;
+  padding: 12px 16px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 7px 10px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { fonts: ["TeX"] }
+  });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h2>Advanced Word Vector Representations</h2>
+<h3>Stochastic gradients with word vectors</h3>
+<p>In each window, we only have at most 2m + 1 words.</p>
+<p>$$<br />
+\nabla_{\theta}J_{t}(\theta) =<br />
+\begin{bmatrix}<br />
+0  \\<br />
+\vdots      \\<br />
+\nabla_{v_{like}}  \\<br />
+0  \\<br />
+\nabla_{u_{I}}  \\<br />
+\vdots      \\<br />
+\nabla_{u_{learning}}  \\<br />
+\vdots<br />
+\end{bmatrix}
+$$</p>
+<p>We may only update the word vectors that actually appear.<br />
+We can use sparse matrix or hash to implement it.<br />
+Most of the objective functions in this class are not convex, so initialization does matter, but if we initialize with small random numbers in these vectors, it does not tend to be a problem.  </p>
+<h3>Use negative sampling</h3>
+<p>$$ p(o|c) = \cfrac{exp(u_o^Tv_c)}{\sum_{w=1}^vexp(u_w^Tv_c)} $$</p>
+<p>The upper part is pretty simple, but the lower part should do gigantic sum, and this sum goes over the entire vocabulary.<br />
+The main idea behind skip-gram is a very neat trick, which is we'll just train a couple of binary logistic regressions for the true pair.<br />
+We'll just take a couple of random words and say how about these random words from the rest of the corpus don't co-occur.  </p>
+<p>Word2Vec: Overall objective function:<br />
+$$ J(\theta) = \cfrac{1}{T}\sum_{t=1}^T J_t(\theta) $$<br />
+$$ J_t(\theta) = log\sigma(u_o^Tv_c) + \sum_{i=1}^T \mathbb{E}_{j\sim P(w)}[log\sigma(-u_j^Tv_c)] $$</p>
+<p>T here corresponds to each window as you go through the corpus.<br />
+Two terms in $J_t(\theta)$, the first one is just a log probability of these two center words and outside words co-occuring.<br />
+Randomly subsample a couple of words from the corpus, and for each of these, we will essentially try to minimize their probability of co-occurring.<br />
+We can do this instead of going through all the different ones saying which word doesn't appear.  </p>
+<ol>
+<li>We take k(about 5~10) negative samples.</li>
+<li>Maximize probability that real outside word appears, minimize probability that random words appear around center word.<br />
+$$ P(w) = U(w)^{3/4}/Z $$<br />
+We sample them from a simple uniform or unigram distribution.The unigram distribution U(w) raised to the 3/4 power so less frequent words be sampled more often.<br />
+The P(w) is an empirical formula, a very simple thing.  </li>
+</ol>
+<h3>Assignment 1: The CBOW</h3>
+<p>Main idea for CBOW: Predict center word from sum of surrounding word vectors.<br />
+Take the derivatives of CBOW function.  </p>
+<h3>Word2vec put similar words nearby in space</h3>
+<p>&quot;Cluster around similar kinds of meaning&quot;<br />
+We can use PCA（主成分分析） visualization of these word vectors.  </p>
+<h3>SVD Based methods</h3>
+<p>Skip-Gram or CBOW capture cooccurrence of words one at time.<br />
+Another choose: capture cooccurrence counts directily.<br />
+A method that came historically before word2vec:<br />
+With a co-occurrence matrix X, we can:  </p>
+<ol>
+<li>Capture both syntactic(POS) and semantic information.  </li>
+<li>Word-document co-occurrence matrix will give general topics leading to &quot;Latent Semantic Analysis&quot;  .  </li>
+</ol>
+<p>Let our corpus contain just three sentences and the window size be 1:</p>
+<ol>
+<li>I enjoy flying.  </li>
+<li>I like NLP.  </li>
+<li>I like deep learning.  </li>
+</ol>
+<p>The resulting counts matrix will then be: <br />
+$$<br />
+\begin{array}{lc}<br />
+\mbox{}&amp;<br />
+\begin{array}{cc}
+I &amp; like &amp; enjoy &amp; deep &amp; learning &amp; NLP &amp; flying &amp; .<br />
+\end{array} \\<br />
+\begin{array}{c}<br />
+I \\<br />
+like \\<br />
+enjoy \\<br />
+deep \\<br />
+learning \\<br />
+NLP \\<br />
+flying \\<br />
+.<br />
+\end{array}&amp;<br />
+\left[\begin{array}{cc}<br />
+0 &amp; 2 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\<br />
+2 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 1 &amp; 0 &amp; 0\\<br />
+1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0\\<br />
+0 &amp; 1 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0\\<br />
+0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 1\\<br />
+0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1\\  <br />
+0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1\\<br />
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 1 &amp; 1 &amp; 0<br />
+\end{array}\right]<br />
+\end{array}<br />
+$$</p>
+<p>It's not a very ideal word vector -- new words, high-dimension.<br />
+Solution: Low dimensional vectors, usually 25-1000 dimensions, similar to word2vec.<br />
+Method1:<br />
+Apply SVD to the cooccurrence matrix.<br />
+Problem: (the, he, has) are too frequent. -- Ignore or cap it(min(X,t),with t~100).<br />
+Problem with SVD: Cimputational cost.  o(mn^2)  </p>
+<h3>Count based vs direct prediction</h3>
+<p>LSA, HAL<br />
+COALS, Hellinger-PCA</p>
+<p>Advantages: Fast training, efficient usage of statistics.<br />
+Disadvantages: Primarily used to capture word similarity, disproportionate（不成比例的） importance given to large counts.</p>
+<p>Skip-gram/CBOW<br />
+NNLM, HLBL, RNN  </p>
+<p>Disadvantages: Scales with corpus size, inefficient usage of statistics.
+Advantages: Generate improved performance on other tasks, can capture complex patterns
+beyond word similarity.  </p>
+<h3>GloVe: Combining the best of two world</h3>
+<p>GloVe :Global Vectors model  </p>
+<p>Loss function:<br />
+$$ J(\theta) = \cfrac{1}{2} \sum_{i,j=1}^W f(P_{ij})(u_i^T v_j - log P_{ij})^2 $$<br />
+Co-occurrence matrix:  P<br />
+Minimize the distance between the inner product $u_i^T v_j$, and the log count of these two words co-occurrence.<br />
+The function $f(P_{ij})$ can lower frequent co-occurrences.  </p>
+<ul>
+<li>Fast training  </li>
+<li>Scalable to huge corpora  </li>
+<li>Good performance, even with small corpus  </li>
+</ul>
+<h3>Two sets of vectors</h3>
+<p>The best solution is to simply sum them up:<br />
+$$ X_{final} = U+V $$  </p>
+<h3>Highlight: Polysemy</h3>
+<p>Word vectors can capture polysemy.<br />
+Word vectors are linear superposition（线性叠加） of each sense vector.<br />
+Sense/context vectors can be recovered by sparse coding.  </p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Assignment1</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 20px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 21px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+h5 {
+  font-size: 20px;
+}
+
+h6 {
+  color: #777;
+  font-size: 20px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 18px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 19px;
+  line-height: 25px;
+  overflow: auto;
+  padding: 12px 16px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 7px 10px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { fonts: ["TeX"] }
+  });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+<h1>CS224N: Assignment #1</h1>
+<h2>1 Softmax (10 points)</h2>
+<h3>(a) (5 points)</h3>
+<p><em>Proof.</em>  $\forall 1 \le i \le dim(x)$  </p>
+<p>$$
+(softmax(x + c))_i<br />
+=\cfrac{exp(x_i+c)}{\sum_{j=1}^{dim(x)}exp(x_j+c)}<br />
+=\cfrac{exp(c)exp(x_i)}{exp(c)\sum_{j=1}^{dim(x)}exp(x_j)}<br />
+=\cfrac{exp(x_i)}{\sum_{j=1}^{dim(x)}exp(x_j)}<br />
+=(softmax(x))_i<br />
+$$</p>
+<h3>(b) (5 points)</h3>
+<p>q1_softmax.py</p>
+<h2>2 Neural Network Basics (30 points)</h2>
+<h3>(a) (3 points)</h3>
+<p>$$\sigma'(x)=\sigma(x)(1-\sigma(x))$$</p>
+<p>$$
+\begin{align}<br />
+\sigma(x) &amp;= \cfrac{1}{1 + e^{-x}}  \\ <br />
+                &amp;= \frac{e^{x}}{1 + e^{x}} \\ 
+\end{align}
+$$
+$$
+\begin{align} 
+\cfrac{\partial}{\partial x} \sigma(x) &amp;= \cfrac{e^{x}  (1 + e^{x}) – (e^{x} e^{x})}{(1 + e^{x})^2}  \\ <br />
+&amp;= \cfrac{e^x}{1 + e^x} \cdot \cfrac{1}{1 + e^x} \\ <br />
+&amp;= \sigma(x)  \sigma(-x) \\<br />
+&amp;= \sigma(x) (1 – \sigma(x))
+\end{align}
+ $$</p>
+<h3>(b) (3 points)</h3>
+<p>$$\cfrac{\partial CE(y, \hat{y})}{\partial \theta}=\hat{y}-y $$  </p>
+<p>Let:<br />
+$$<br />
+\begin{align} 
+  f_i &amp;= e^{\theta_i} \\<br />
+  g_i &amp;= \sum_{k=1}^K e^{\theta_k} \\<br />
+  S_i &amp;= \frac{f_i}{g_i} \\<br />
+  \cfrac{\partial S_i}{\partial \theta_j} &amp;= \cfrac{f'_i g_i – g'_i f_i}{g_i^2}<br />
+\end{align}
+$$  </p>
+<p>When i == j:<br />
+$$<br />
+f'_i = f_i \\
+g'_i = e^{\theta_j} \\<br />
+\begin{align} 
+\cfrac{\partial S_i}{\partial \theta_j} &amp;= \cfrac{e^{\theta_i} \sum_k e^{\theta_k} – e^{\theta_j} e^{\theta_i} }{ (\sum_k e^{\theta_k})^2 } \\<br />
+&amp;= \cfrac{e^{\theta_i}}{\sum_k e^{\theta_k}} \cdot \cfrac{\sum_k e^{\theta_k} – e^{\theta_j}}{\sum_k e^{\theta_k}} \\<br />
+&amp;= S_i (1 – S_i)
+\end{align}
+$$  </p>
+<p>When i!=j:<br />
+$$<br />
+f'_i = 0 \\<br />
+g'_i = e^{\theta_j} \\<br />
+\begin{align}<br />
+\cfrac{\partial S_i}{\partial \theta_j}  &amp;= \cfrac{0 – e^{\theta_j} e^{\theta_i}}{(\sum_k e^{\theta_k})^2} \\<br />
+&amp;= – \cfrac{e^{\theta_j}}{\sum_k e^{\theta_k}} \cdot \cfrac{e^{\theta_i}}{\sum_k e^{\theta_k}} \\ <br />
+&amp;= -S_j S_i<br />
+\end{align}<br />
+$$  </p>
+<p>$$<br />
+\begin{align} 
+\cfrac{\partial CE}{\partial \theta_i}
+&amp;= – \sum_k y_k \cfrac{\partial log S_k}{\partial \theta_i} \\<br />
+&amp;= – \sum_k y_k \cfrac{1}{S_k} \cfrac{\partial S_k}{\partial \theta_i} \\<br />
+&amp;= – y_i (1 – S_i) – \sum_{k \ne i} y_k \cfrac{1}{S_k} (-S_k S_i) \\<br />
+&amp;= – y_i (1 – S_i) + \sum_{k \ne i} y_k S_i \\<br />
+&amp;= – y_i + y_i S_i + \sum_{k \ne i} y_k S_i \\<br />
+&amp;= S_i(\sum_k y_k) – y_i <br />
+\end{align}
+$$  </p>
+<p>Becasue $\sum_k y_k = 1$, so $\cfrac{\partial CE}{\partial \theta_i} = \hat{y}-y$</p>
+<h3>(c) (6 points)</h3>
+<p>Let $z_2=hW_2+b_2$, and $z_1=xW_1+b_1$, then  </p>
+<p>$$<br />
+\begin{equation}<br />
+\begin{split}<br />
+\delta_1&amp;=\cfrac{\partial CE}{\partial z_2}=\hat{y}-y \\<br />
+\delta_2&amp;=\cfrac{\partial CE}{\partial h}=\delta_1 \cfrac{\partial z_2}{\partial h}=\delta_1 W_2^T \\<br />
+\delta_3&amp;=\cfrac{\partial CE}{\partial z_1}=\delta_2 \cfrac{\partial h}{\partial z_1}=\delta_2 \sigma'(z_1) \\<br />
+\cfrac{\partial CE}{\partial x}&amp;=\delta_3 \cfrac{\partial z_1}{\partial x}=\delta_3 W_1^T<br />
+\end{split}<br />
+\end{equation}<br />
+$$</p>
+<h3>(d) (2 points)</h3>
+<p>The count of parameters is $D_x \cdot H + H + D_y \cdot H + D_y$.</p>
+<h3>(e) (4 points)</h3>
+<p>q2_sigmoid.py</p>
+<h3>(f) (4 points)</h3>
+<p>q2_gradcheck.py</p>
+<h3>(g) (8 points)</h3>
+<p>q2_neural.py</p>
+<h2>3 word2vec (40 points + 2 bonus)</h2>
+<h3>(a) (3 points)</h3>
+<p>Let $\hat{y}$ be the column vector of the softmax prediction of words, and $y$ be the one-hot label which is also a column vector. Then
+$$
+\frac{\partial J}{\partial v_c}=U(\hat{y}-y).
+$$</p>
+<h3>(b) (3 points)</h3>
+<p>$$
+\frac{\partial J}{\partial U}=v_c(\hat{y}-y)^T.
+$$</p>
+<h3>(c) (6 points)</h3>
+<p>$$
+\begin{equation}
+\begin{split}
+\frac{\partial J}{\partial v_c} &amp;= (\sigma(u_o^Tv_c)-1)u_o-\sum_{k=1}^K (\sigma(-u_k^Tv_c)-1)u_k \\<br />
+\frac{\partial J}{\partial u_o} &amp;= (\sigma(u_o^Tv_c)-1)v_c \\<br />
+\frac{\partial J}{\partial u_k} &amp;= -(\sigma(-u_k^Tv_c)-1)v_c, \text{ for all }k=1,2,...,K
+\end{split}
+\end{equation}
+$$</p>
+<h3>(d) (8 points)</h3>
+<p>For SG:<br />
+$$
+J_{skip-gram}(word_{c-m \dots c+m}) = \sum\limits_{-m \leq j \leq m, j \ne 0} F(w_{c+j}, v_c)<br />
+$$</p>
+<p>CBOW:<br />
+$$<br />
+\hat{v} = \sum\limits_{-m \leq j \leq m, j \ne 0} v_{c+j}<br />
+$$  </p>
+<p>$$<br />
+J_{CBOW}(word_{c-m \dots c+m}) = F(w_c, \hat{v})<br />
+$$  </p>
+<h3>(e) (12 points)</h3>
+<p>q3_word2vec.py</p>
+<h3>(f) (4 points)</h3>
+<p>q3_sgd.py</p>
+<h3>(g) (4 points)</h3>
+<p>q3_run.py</p>
+<p><strong>Solution:</strong></p>
+<p><img src="assignment1/q3_word_vectors.png" /></p>
+<h3>(h) (Extra: 2 points)</h3>
+<p>q3_word2vec.py</p>
+<h2>4 Sentiment Analysis (20 points)</h2>
+<h3>(a) (2 points)</h3>
+<p>q4_sentiment.py</p>
+<h3>(b) (1 points)</h3>
+<p><strong>Solution:</strong></p>
+<p>To avoid overfitting to the training examples.</p>
+<h3>(c) (2 points)</h3>
+<p>q4_sentiment.py</p>
+<p><strong>Solution:</strong></p>
+<pre><code>bestResult = max(results, key=lambda x: x[&quot;dev&quot;])
+</code></pre>
+
+<h3>(d) (3 points)</h3>
+<p>Some possible reasons:</p>
+<ul>
+<li>Higher dimensional word vectors may contain more information</li>
+<li>GloVe vectors were trained on a larger corpus</li>
+<li>GloVe take the use of global vector, but word2vec not.</li>
+</ul>
+<h3>(e) (4 points)</h3>
+<p><strong>Solution:</strong></p>
+<p><img src="assignment1/q4_reg_v_acc.png" /></p>
+<h3>(f) (4 points)</h3>
+<p><strong>Solution:</strong></p>
+<p><img src="assignment1/q4_dev_conf.png" /></p>
+<h3>(g) (4 points)</h3>
+<p><strong>Solution:</strong></p>
+<p>sarcasm（讽刺）: nothing is sacred in this gut-buster.  </p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
